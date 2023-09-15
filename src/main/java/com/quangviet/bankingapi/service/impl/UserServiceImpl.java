@@ -2,6 +2,7 @@ package com.quangviet.bankingapi.service.impl;
 
 import com.quangviet.bankingapi.dto.AccountInfo;
 import com.quangviet.bankingapi.dto.BankResponse;
+import com.quangviet.bankingapi.dto.EmailDetail;
 import com.quangviet.bankingapi.dto.UserRequest;
 import com.quangviet.bankingapi.entity.User;
 import com.quangviet.bankingapi.repository.UserRepository;
@@ -18,6 +19,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EmailService emailService;
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         /**
@@ -48,6 +52,15 @@ public class UserServiceImpl implements UserService{
                 .build();
 
         User savedUser = userRepository.save(newUser);
+        //Send Email alert
+        EmailDetail emailDetail= EmailDetail.builder()
+                .recipient(savedUser.getEmail())
+                .subject("ACCOUNT CREATION")
+                .messageBody("Congratulation! Your Account has been Successfully Created.\nYour Account Detail: \n" +
+                        "Account Name: "+ savedUser.getFirstName()+" "+savedUser.getLastName()+" "+savedUser.getOtherName()+"\nAccount Number: "+savedUser.getAccountNumber())
+                .build();
+        emailService.sendEmailAlert(emailDetail);
+
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREATION_CODE)
                 .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
