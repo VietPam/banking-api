@@ -1,9 +1,6 @@
 package com.quangviet.bankingapi.service.impl;
 
-import com.quangviet.bankingapi.dto.AccountInfo;
-import com.quangviet.bankingapi.dto.BankResponse;
-import com.quangviet.bankingapi.dto.EmailDetail;
-import com.quangviet.bankingapi.dto.UserRequest;
+import com.quangviet.bankingapi.dto.*;
 import com.quangviet.bankingapi.entity.User;
 import com.quangviet.bankingapi.repository.UserRepository;
 import com.quangviet.bankingapi.utils.AccountUtils;
@@ -72,5 +69,43 @@ public class UserServiceImpl implements UserService{
                         .build())
                 .build();
 
-    };
+    }
+
+    @Override
+    public BankResponse balanceEnquiry(EnquiryRequest request) {
+        //check if the provided account number exist in the db
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+        if (!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXIST_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXIST_MESSAGE)
+                    .responseMessage(null)
+                    .build();
+        }
+        User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_FOUND_CODE)
+                .responseMessage(AccountUtils.ACCOUNT_FOUND_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountBalance(foundUser.getAccountBalance())
+                        .accountNumber(foundUser.getAccountNumber())
+                        .accountName(foundUser.getFirstName()+" "+foundUser.getLastName()+" "+foundUser.getOtherName())
+                        .build())
+                .build();
+
+    }
+
+    @Override
+    public String nameEnquiry(EnquiryRequest request) {
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+        if (!isAccountExist){
+           return AccountUtils.ACCOUNT_NOT_EXIST_MESSAGE;
+        }
+        User foundUser= userRepository.findByAccountNumber(request.getAccountNumber());
+        return foundUser.getFirstName()+" "+foundUser.getLastName()+" "+foundUser.getOtherName();
+    }
+
+    ;
+
+    // balance Enquiry, name Enquiry, credit, debit, transfer
 }
