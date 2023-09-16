@@ -1,6 +1,7 @@
 package com.quangviet.bankingapi.controller;
 
 import com.quangviet.bankingapi.dto.BankResponse;
+import com.quangviet.bankingapi.dto.CreditDebitRequest;
 import com.quangviet.bankingapi.dto.EnquiryRequest;
 import com.quangviet.bankingapi.dto.UserRequest;
 import com.quangviet.bankingapi.service.impl.UserService;
@@ -26,4 +27,8 @@ public class UserController {
         return userService.nameEnquiry(request);
     }
 
+    @PostMapping("credit")
+    public BankResponse creditAccount(@RequestBody CreditDebitRequest request){
+        return userService.creditAccount(request);
+    }
 }
