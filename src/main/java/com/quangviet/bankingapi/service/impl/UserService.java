@@ -1,9 +1,6 @@
 package com.quangviet.bankingapi.service.impl;
 
-import com.quangviet.bankingapi.dto.BankResponse;
-import com.quangviet.bankingapi.dto.CreditDebitRequest;
-import com.quangviet.bankingapi.dto.EnquiryRequest;
-import com.quangviet.bankingapi.dto.UserRequest;
+import com.quangviet.bankingapi.dto.*;
 
 public interface UserService {
 
@@ -16,5 +13,6 @@ public interface UserService {
     BankResponse creditAccount(CreditDebitRequest request);
 
     BankResponse debitAccount(CreditDebitRequest request);
+    BankResponse transfer(TransferRequest request);
 
 }

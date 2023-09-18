@@ -1,9 +1,6 @@
 package com.quangviet.bankingapi.controller;
 
-import com.quangviet.bankingapi.dto.BankResponse;
-import com.quangviet.bankingapi.dto.CreditDebitRequest;
-import com.quangviet.bankingapi.dto.EnquiryRequest;
-import com.quangviet.bankingapi.dto.UserRequest;
+import com.quangviet.bankingapi.dto.*;
 import com.quangviet.bankingapi.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +31,9 @@ public class UserController {
     @PostMapping("debit")
     public BankResponse debitAccount(@RequestBody CreditDebitRequest request){
         return userService.debitAccount(request);
+    }
+    @PostMapping("transfer")
+    public BankResponse transfer(@RequestBody TransferRequest request){
+        return userService.transfer(request);
     }
 }
